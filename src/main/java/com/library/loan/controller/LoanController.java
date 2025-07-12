@@ -52,11 +52,13 @@ public class LoanController {
         String type = (String) payload.get("type");
 
         if ("borrow".equals(type)) {
-            Long bookId = ((Number) payload.get("bookId")).longValue();
-            Long userId = ((Number) payload.get("userId")).longValue();
+            // Corrected parsing for bookId and userId
+            Long bookId = Long.valueOf(payload.get("bookId").toString());
+            Long userId = Long.valueOf(payload.get("userId").toString());
             return borrowBook(bookId, userId);
         } else if ("return".equals(type)) {
-            Long loanId = ((Number) payload.get("loanId")).longValue();
+            // Corrected parsing for loanId
+            Long loanId = Long.valueOf(payload.get("loanId").toString());
             return returnBook(loanId);
         } else {
             return new ResponseEntity<>("Invalid loan action type", HttpStatus.BAD_REQUEST);
@@ -64,6 +66,7 @@ public class LoanController {
     }
 
     private ResponseEntity<?> borrowBook(Long bookId, Long userId) {
+        // ... (rest of the method remains the same)
         // 1. Validate Book existence and availability
         Boolean bookAvailable = webClient.get()
                 .uri(bookServiceUrl + "/{id}", bookId)
@@ -111,6 +114,7 @@ public class LoanController {
     }
 
     private ResponseEntity<?> returnBook(Long loanId) {
+        // ... (rest of the method remains the same)
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
         if (loanOptional.isEmpty()) {
             return new ResponseEntity<>("Loan record not found.", HttpStatus.NOT_FOUND);
