@@ -49,7 +49,7 @@ pipeline {
                     post {
                         always {
                             timeout(time: 5, unit: 'MINUTES') {
-                                waitForQualityGate()
+                                waitForQualityGate abortPipeline: true
                             }
                         }
                     }
